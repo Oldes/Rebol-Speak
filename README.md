@@ -1,4 +1,4 @@
-[![Rebol-Speak CI](https://github.com/Oldes/Rebol-C-Extension-Speak/actions/workflows/main.yml/badge.svg)](https://github.com/Oldes/Rebol-C-Extension-Speak/actions/workflows/main.yml)
+[![Rebol-Speak CI](https://github.com/Oldes/Rebol-Speak/actions/workflows/main.yml/badge.svg)](https://github.com/Oldes/Rebol-Speak/actions/workflows/main.yml)
 
 # Rebol/Speak
 
@@ -6,7 +6,8 @@ Speak extension for [Rebol3](https://github.com/Oldes/Rebol3) (version 3.14.1 an
 
 ## Usage
 ```rebol
-speak: import speak
+import speak
+say "Hello world!"
 
 ```
 
