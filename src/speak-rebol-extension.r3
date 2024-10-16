@@ -135,6 +135,7 @@ foreach line split reb-code lf [
 ;-- C file speaks -----------------------------------------------------------
 header: {$logo
 
+#undef BYTE_SIZE
 #include "rebol-extension.h"
 
 #define SERIES_TEXT(s)   ((char*)SERIES_DATA(s))
@@ -152,6 +153,9 @@ typedef struct voice_t {
 	void *synth;
 	void *text;
 	int  number;
+#ifdef TO_MACOS
+	BOOL isSpeaking;
+#endif
 } voice_t;
 
 extern u32* arg_words;

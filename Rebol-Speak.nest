@@ -30,7 +30,7 @@ flag:   shared
 	define: TO_MACOS
 	sign: on
 	frameworks: [AppKit]
-	cflag: -Wno-deprecated-declarations
+	cflags: -Wno-deprecated-declarations
 ;	entitlements: %speak/Entitlements.plist
 ]
 

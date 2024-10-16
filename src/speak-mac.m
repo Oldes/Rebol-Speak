@@ -17,6 +17,16 @@
 
 #include "speak-rebol-extension.h"
 
+// Forward declaration of callback function
+@interface SpeechSynthDelegate : NSObject <NSSpeechSynthesizerDelegate>
+@property (nonatomic) BOOL *isSpeakingPtr;
+@end
+
+@implementation SpeechSynthDelegate
+- (void)speechSynthesizer:(NSSpeechSynthesizer *)sender didFinishSpeaking:(BOOL)finishedSpeaking {
+    *(self.isSpeakingPtr) = NO;
+}
+@end
 
 void list_voices(void) {
     @autoreleasepool {
@@ -52,7 +62,24 @@ int speak(voice_t* voice, int no_wait) {
 			}
 			voice->synth = synthesizer;
 		}
-		[synthesizer startSpeakingString:nsText];
+		if (no_wait) {
+			[synthesizer startSpeakingString:nsText];
+		} else {
+			// Create delegate instance and link it to the synthesizer
+            SpeechSynthDelegate *delegate = [[SpeechSynthDelegate alloc] init];
+            delegate.isSpeakingPtr = &(voice->isSpeaking);
+            synthesizer.delegate = delegate;
+
+            voice->isSpeaking = YES;
+            [synthesizer startSpeakingString:nsText];
+
+            // Run loop to block until speaking is done
+            while (voice->isSpeaking) {
+                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+            }
+
+            [delegate release];
+		}
 	}
 	return 0;
 }

@@ -56,7 +56,7 @@ extern "C" {
 		HRESULT hr;
 		ISpVoice *pVoice = NULL;
 
-		if (voice->pVoice) {
+		if (voice->synth) {
 			pVoice = (ISpVoice*)voice->synth;
 		} else {
 			hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void **)&pVoice);
@@ -89,7 +89,7 @@ extern "C" {
 	}
 
 	void release_voice(voice_t* voice) {
-		if (voice == null) return;
+		if (voice == NULL) return;
 		ISpVoice *pVoice = (ISpVoice*)voice->synth;
 		if (pVoice) pVoice->Release();
 	}
