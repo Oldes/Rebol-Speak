@@ -149,7 +149,7 @@ header: {$logo
 extern REBCNT Handle_VoiceHandle;
 
 typedef struct voice_t {
-	void *pVoice;
+	void *synth;
 	void *text;
 	int  number;
 } voice_t;

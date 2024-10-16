@@ -3,11 +3,8 @@
 ;-  (/uOu\)  https://github.com/Siskin-framework/Builder/                       
 ;-===="="=======================================================================
 
-;github: Oldes/speak
-
 version: 0.0.1
 
-;include:  %speak/
 
 compiler: clang
 arch:     x64
@@ -27,6 +24,14 @@ flag:   shared
 ]
 #if Linux? [
 	compiler: gcc
+	cflags: -fPIC
+]
+#if macOS? [
+	define: TO_MACOS
+	sign: on
+	frameworks: [AppKit]
+	cflag: -Wno-deprecated-declarations
+;	entitlements: %speak/Entitlements.plist
 ]
 
 target-x86: [
@@ -56,28 +61,7 @@ target-armv7: [
 	arch: armv7
 	flag: "-march=armv7"
 ]
-;----------------------------------------------------------------
-
-
-#if Posix? [
-;	libraries: [%dl %m %pthread]
-;	cflag: -msse2
-;	cflag: -mavx2
-]
-
-#if macOS? [
-	sign: on
-;	entitlements: %speak/Entitlements.plist
-;	define: DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING
-;	define: MA_NO_RUNTIME_LINKING
-;	define: MA_ENABLE_ONLY_SPECIFIC_BACKENDS
-;	define: MA_ENABLE_COREAUDIO
-;	frameworks: [CoreFoundation CoreAudio AudioToolbox]
-]
-#if Linux? [
-	cflags: -fPIC
-]
-
+;-----------------------------------------------------------------
 ;- generate main extension header --------------------------------
 do %src/speak-rebol-extension.r3 
 
@@ -87,6 +71,9 @@ files: [
 	%src/speak-rebol-extension.c
 	#if Windows? [
 		%src/speak-win.cpp
+	]
+	#if macOS? [
+		%src/speak-mac.m
 	]
 ]
 
@@ -101,6 +88,16 @@ eggs: [
 		"Rebol Speak extension: win32_x64" [
 			name: %speak-windows-x64.rebx
 			:target-x64
+		]
+	]
+	#if macOS? [
+		"Rebol Speak extension: x64" [
+			name: %speak-x64
+			:target-x64
+		]
+		"Rebol Speak extension: arm64" [
+			name: %speak-arm64
+			:target-arm64
 		]
 	]
 

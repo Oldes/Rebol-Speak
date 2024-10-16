@@ -66,9 +66,7 @@ int VoiceHandle_free(void* hndl) {
 	voice_t *voice = (voice_t*)hob->data;
 	
 	//debug_print("Release voice %lx %lx\n", (unsigned long)(uintptr_t)hob->data, (unsigned long)(uintptr_t)voice->text);
-	
-	release_voice(voice->pVoice);
-	if (voice->text) free(voice->text);
+	release_voice(voice);
 	return 0;
 }
 int VoiceHandle_get_path(REBHOB *hob, REBCNT word, REBCNT *type, RXIARG *arg) {
@@ -144,6 +142,9 @@ COMMAND cmd_say(RXIFRM *frm, void *ctx) {
 		voice->number = RXA_INT32(frm,3);		
 	}
 
+	// Rebol API needs some function to convert a string to a system text.
+	// Wide char on Windows and UTF-8 for the rest. Now one must use this ugly code.
+
 #ifdef TO_WINDOWS
 	// Windows API requires a wide char string!
 	size_t bytes = (len + 1) * 2;
@@ -153,10 +154,13 @@ COMMAND cmd_say(RXIFRM *frm, void *ctx) {
 	if (BYTE_SIZE(ser)) {
 		MultiByteToWideChar(CP_UTF8, 0, (LPCCH)(ser->data + index), len, voice->text, len);
 	} else {
-		memcpy(voice->text, ser->data + index * 2, len * 2);
+		memcpy(voice->text, SERIES_SKIP(ser, index), len * 2);
 	}
 	REBUNI *uni = (REBUNI*) voice->text;
 	uni[len] = 0;
+#else
+	ser = RL_ENCODE_UTF8_STRING(SERIES_DATA(ser), SERIES_TAIL(ser), !BYTE_SIZE(ser), FALSE);
+	voice->text = SERIES_TEXT(ser);
 #endif
 
 	speak(voice, no_wait);

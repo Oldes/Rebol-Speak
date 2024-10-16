@@ -57,19 +57,19 @@ extern "C" {
 		ISpVoice *pVoice = NULL;
 
 		if (voice->pVoice) {
-			pVoice = (ISpVoice*)voice->pVoice;
+			pVoice = (ISpVoice*)voice->synth;
 		} else {
 			hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void **)&pVoice);
 			if (FAILED(hr)) return 0;
-			voice->pVoice = pVoice;
+			voice->synth = pVoice;
 		}
 
-		if (voice->number) {
+		if (voice->number > 0) {
 			IEnumSpObjectTokens *pEnum = NULL;
 			ULONG ulCount = 0;
 			hr = SpEnumTokens(SPCAT_VOICES, NULL, NULL, &pEnum);
 			ISpObjectToken *pSelectedVoice = NULL;
-			hr = pEnum->Item(voice->number, &pSelectedVoice);
+			hr = pEnum->Item(voice->number-1, &pSelectedVoice);
 			if (SUCCEEDED(hr)) {
 				pVoice->SetVoice(pSelectedVoice);
 				pSelectedVoice->Release();
@@ -88,7 +88,9 @@ extern "C" {
 		return 0;
 	}
 
-	void release_voice(ISpVoice *pVoice) {
+	void release_voice(voice_t* voice) {
+		if (voice == null) return;
+		ISpVoice *pVoice = (ISpVoice*)voice->synth;
 		if (pVoice) pVoice->Release();
 	}
 }
