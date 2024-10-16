@@ -82,11 +82,11 @@ files: [
 eggs: [
 	#if Windows? [
 		"Rebol Speak extension: win32_x86" [
-			name: %speak-windows-x86.rebx
+			name: %speak-x86
 			:target-x86
 		]
 		"Rebol Speak extension: win32_x64" [
-			name: %speak-windows-x64.rebx
+			name: %speak-x64
 			:target-x64
 		]
 	]

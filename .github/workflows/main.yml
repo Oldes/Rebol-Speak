@@ -20,15 +20,13 @@ jobs:
       uses: oldes/install-siskin@v0.17.0
 
     - name: Build 32bit Rebol/Speak extension
-      run: ./siskin Rebol-Speak.nest --msvc -o ./speak-windows-x86.rebx speak-windows-x86.rebx
+      run: ./siskin Rebol-Speak.nest --msvc -o ./speak-windows-x86.rebx speak-x86
 
     - name: Build 64bit Rebol/Speak extension
-      run: ./siskin Rebol-Speak.nest --msvc -o ./speak-windows-x64.rebx speak-windows-x64.rebx
+      run: ./siskin Rebol-Speak.nest --msvc -o ./speak-windows-x64.rebx speak-x64
 
     - name: Install Rebol for extension test
       uses: oldes/install-rebol@v3.18.0
-      with:
-        product: Bulk
 
     - name: Minimal Rebol/Speak extension test
       run:  ./rebol3 ci-test.r3
@@ -39,7 +37,7 @@ jobs:
         path: ./*.rebx
 
   macos:
-    runs-on: macos-12
+    runs-on: macos-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -47,19 +45,22 @@ jobs:
     - name: Install Siskin Builder
       uses: oldes/install-siskin@v0.17.0
 
-    - name: Build 64bit Rebol Blend2d extension
+    - name: Build 64bit Rebol Blend2d extension (Intel)
       run: ./siskin Rebol-Speak.nest -o ./speak-macos-x64.rebx speak-x64
+
+    - name: Build 64bit Rebol Blend2d extension (ARM)
+      run: ./siskin Rebol-Speak.nest -o ./speak-macos-arm64.rebx speak-arm64
 
     - name: Install Rebol for extension test
       uses: oldes/install-rebol@v3.18.0
-      with:
-        product: Bulk
 
     - name: Minimal Rebol/Speak extension test
       run:  ./rebol3 ci-test.r3
 
     - name: Compress 64bit Rebol Blend2d extension
-      run:  gzip -9 ./speak-macos-x64.rebx
+      run:  |
+        gzip -9 ./speak-macos-x64.rebx
+        gzip -9 ./speak-macos-arm64.rebx
 
     ###############################################################################
     # Collecting build artifacts...
