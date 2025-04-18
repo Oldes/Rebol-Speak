@@ -26,14 +26,14 @@ jobs:
       run: ./siskin Rebol-Speak.nest --msvc -o ./speak-windows-x64.rebx speak-x64
 
     - name: Install Rebol for extension test
-      uses: oldes/install-rebol@v3.18.0
+      uses: oldes/install-rebol@v3.19.0
 
     - name: Minimal Rebol/Speak extension test
       run:  ./rebol3 ci-test.r3
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: Rebol-Speak-CI-${{github.run_id}}
+        name: Rebol-Speak-CI-windows-${{github.run_id}}
         path: ./*.rebx
 
   macos:
@@ -45,14 +45,14 @@ jobs:
     - name: Install Siskin Builder
       uses: oldes/install-siskin@v0.17.0
 
-    - name: Build 64bit Rebol Blend2d extension (Intel)
+    - name: Build 64bit Rebol/Speak extension (Intel)
       run: ./siskin Rebol-Speak.nest -o ./speak-macos-x64.rebx speak-x64
 
-    - name: Build 64bit Rebol Blend2d extension (ARM)
+    - name: Build 64bit Rebol/Speak extension (ARM)
       run: ./siskin Rebol-Speak.nest -o ./speak-macos-arm64.rebx speak-arm64
 
     - name: Install Rebol for extension test
-      uses: oldes/install-rebol@v3.18.0
+      uses: oldes/install-rebol@v3.19.0
 
     - name: Minimal Rebol/Speak extension test
       run:  ./rebol3 ci-test.r3
@@ -64,8 +64,8 @@ jobs:
 
     ###############################################################################
     # Collecting build artifacts...
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: Rebol-Speak-CI-${{github.run_id}}
+        name: Rebol-Speak-CI-macos-${{github.run_id}}
         path: ./*.rebx.gz
 
