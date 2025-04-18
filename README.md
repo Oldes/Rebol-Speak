@@ -1,4 +1,8 @@
+[![rebol-speak](https://github.com/user-attachments/assets/351c5178-62d7-4e69-b1aa-1e1b4571d67b)](https://github.com/Oldes/Rebol-Speak)
+
 [![Rebol-Speak CI](https://github.com/Oldes/Rebol-Speak/actions/workflows/main.yml/badge.svg)](https://github.com/Oldes/Rebol-Speak/actions/workflows/main.yml)
+[![Gitter](https://badges.gitter.im/rebol3/community.svg)](https://app.gitter.im/#/room/#Rebol3:gitter.im)
+[![Zulip](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://rebol.zulipchat.com/)
 
 # Rebol/Speak
 
